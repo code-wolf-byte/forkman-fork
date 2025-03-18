@@ -63,6 +63,9 @@ func New(cfg *config.ForkConfig, log *zerolog.Logger, db *gorm.DB, acfg aws.Conf
 	s.AddHandler(d.onGuildCreateGuildUpdate)
 	s.AddHandler(d.onInteractionCreate)
 	s.AddHandler(d.onMessageCreate)
+	s.AddHandler(d.onGuildRoleUpdate)
+	s.AddHandler(d.onVoiceStateUpdate)
+	s.AddHandler(d.onMessageReactionAdd)
 
 	// Open the session
 	log.Info().Msg("Opening discord session")
@@ -278,4 +281,40 @@ func (d *Discord) onInteractionCreate(s *discordgo.Session, i *discordgo.Interac
 
 func (d *Discord) onMessageCreate(s *discordgo.Session, m *discordgo.MessageCreate) {
 	go d.qna[m.GuildID].OnMessageCreate(s, m)
+}
+
+func (d *Discord) onGuildRoleUpdate(s *discordgo.Session, r *discordgo.GuildRoleUpdate) {
+	d.log.Info().
+		Str("guild_id", r.GuildID).
+		Str("role_id", r.Role.ID).
+		Str("role_name", r.Role.Name).
+		Msg("Role updated")
+	// Additional logic goes here
+}
+
+func (d *Discord) onVoiceStateUpdate(s *discordgo.Session, vsu *discordgo.VoiceStateUpdate) {
+	// If the ChannelID is empty, they left. If it’s non-empty, they joined or moved.
+	if vsu.ChannelID == "" {
+		// Left
+		d.log.Info().
+			Str("guild_id", vsu.GuildID).
+			Str("user_id", vsu.UserID).
+			Msg("User left a voice channel")
+		// Additional logic goes here
+		return
+	}
+
+	// Otherwise, vsu.ChannelID != "", so user is in a channel now.
+	// They either joined for the first time or switched from one channel to another.
+	d.log.Info().
+		Str("guild_id", vsu.GuildID).
+		Str("channel_id", vsu.ChannelID).
+		Str("user_id", vsu.UserID).
+		Msg("User joined or moved to a voice channel")
+
+	// Additional logic goes here
+}
+
+func (d *Discord) onMessageReactionAdd(s *discordgo.Session, mra *discordgo.MessageReactionAdd) {
+	// Additional logic goes here
 }
