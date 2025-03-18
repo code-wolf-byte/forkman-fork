@@ -5,8 +5,8 @@ import (
 	"net/http"
 	"time"
 
-	"github.com/avvo-na/forkman/common/config"
-	"github.com/avvo-na/forkman/internal/discord"
+	"github.com/code-wolf-byte/forkman/common/config"
+	"github.com/code-wolf-byte/forkman/internal/discord"
 	"github.com/go-playground/validator/v10"
 	"github.com/markbates/goth"
 	"github.com/markbates/goth/gothic"
@@ -55,12 +55,12 @@ func New(
 		))
 
 	s := &Server{
-		db:      db,
-		log:     l,
-		valid:   v,
-		discord: d,
-		cfg:     cfg,
-    startTime: time.Now(),
+		db:        db,
+		log:       l,
+		valid:     v,
+		discord:   d,
+		cfg:       cfg,
+		startTime: time.Now(),
 	}
 
 	// Declare Server config

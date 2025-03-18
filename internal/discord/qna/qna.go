@@ -5,9 +5,9 @@ import (
 	"errors"
 	"fmt"
 
-	"github.com/avvo-na/forkman/internal/database"
 	"github.com/aws/aws-sdk-go-v2/service/bedrockagentruntime"
 	"github.com/bwmarrin/discordgo"
+	"github.com/code-wolf-byte/forkman/internal/database"
 	"github.com/rs/zerolog"
 	"gorm.io/gorm"
 )
@@ -282,9 +282,9 @@ func (m *QNA) OnMessageCreate(s *discordgo.Session, msg *discordgo.MessageCreate
 		return
 	}
 
-  if msg.GuildID == "" {
-    return
-  }
+	if msg.GuildID == "" {
+		return
+	}
 
 	mod, err := m.repo.ReadModule(msg.GuildID)
 	if err != nil {

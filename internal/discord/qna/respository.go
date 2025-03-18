@@ -1,7 +1,7 @@
 package qna
 
 import (
-	"github.com/avvo-na/forkman/internal/database"
+	"github.com/code-wolf-byte/forkman/internal/database"
 	"gorm.io/gorm"
 )
 

@@ -5,8 +5,8 @@ import (
 	"fmt"
 	"net/http"
 
-	"github.com/avvo-na/forkman/internal/discord/moderation"
-	e "github.com/avvo-na/forkman/internal/server/common/err"
+	"github.com/code-wolf-byte/forkman/internal/discord/moderation"
+	e "github.com/code-wolf-byte/forkman/internal/server/common/err"
 	"github.com/go-chi/chi/v5/middleware"
 )
 

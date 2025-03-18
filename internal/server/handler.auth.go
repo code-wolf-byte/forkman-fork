@@ -6,7 +6,7 @@ import (
 	"net/http"
 	"time"
 
-	"github.com/avvo-na/forkman/internal/database"
+	"github.com/code-wolf-byte/forkman/internal/database"
 	"github.com/go-chi/chi/v5"
 	"github.com/go-chi/chi/v5/middleware"
 	"github.com/markbates/goth/gothic"

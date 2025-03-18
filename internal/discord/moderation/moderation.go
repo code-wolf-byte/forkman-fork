@@ -5,8 +5,8 @@ import (
 	"errors"
 	"fmt"
 
-	"github.com/avvo-na/forkman/internal/database"
 	"github.com/bwmarrin/discordgo"
+	"github.com/code-wolf-byte/forkman/internal/database"
 	"github.com/rs/zerolog"
 	"gorm.io/gorm"
 )

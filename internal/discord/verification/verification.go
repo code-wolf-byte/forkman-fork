@@ -5,9 +5,9 @@ import (
 	"errors"
 	"fmt"
 
-	"github.com/avvo-na/forkman/internal/database"
 	"github.com/aws/aws-sdk-go-v2/service/ses"
 	"github.com/bwmarrin/discordgo"
+	"github.com/code-wolf-byte/forkman/internal/database"
 	"github.com/rs/zerolog"
 	"gorm.io/gorm"
 )

@@ -3,15 +3,16 @@ package discord
 import (
 	"errors"
 
-	"github.com/avvo-na/forkman/common/config"
-	"github.com/avvo-na/forkman/internal/database"
-	"github.com/avvo-na/forkman/internal/discord/moderation"
-	"github.com/avvo-na/forkman/internal/discord/qna"
-	"github.com/avvo-na/forkman/internal/discord/verification"
 	"github.com/aws/aws-sdk-go-v2/aws"
 	"github.com/aws/aws-sdk-go-v2/service/bedrockagentruntime"
 	"github.com/aws/aws-sdk-go-v2/service/ses"
 	"github.com/bwmarrin/discordgo"
+	"github.com/code-wolf-byte/forkman/common/config"
+	"github.com/code-wolf-byte/forkman/internal/database"
+	"github.com/code-wolf-byte/forkman/internal/discord/economy"
+	"github.com/code-wolf-byte/forkman/internal/discord/moderation"
+	"github.com/code-wolf-byte/forkman/internal/discord/qna"
+	"github.com/code-wolf-byte/forkman/internal/discord/verification"
 	"github.com/rs/zerolog"
 	"gorm.io/gorm"
 )
@@ -26,6 +27,7 @@ type Discord struct {
 	moderation   map[string]*moderation.Moderation     /* GuildID -> module*/
 	verification map[string]*verification.Verification /* GuildID -> module */
 	qna          map[string]*qna.QNA                   /* GuildID -> module */
+	economy      map[string]*economy.Economy
 }
 
 var ErrModuleNotFound = errors.New("module not found")
@@ -54,6 +56,7 @@ func New(cfg *config.ForkConfig, log *zerolog.Logger, db *gorm.DB, acfg aws.Conf
 	d.moderation = make(map[string]*moderation.Moderation)
 	d.verification = make(map[string]*verification.Verification)
 	d.qna = make(map[string]*qna.QNA)
+	d.economy = make(map[string]*economy.Economy)
 
 	// Global handlers
 	s.AddHandler(d.onReadyNotify)
@@ -117,6 +120,14 @@ func (d *Discord) GetVerificationModule(guildSnowflake string) (*verification.Ve
 		return nil, ErrModuleNotFound
 	}
 
+	return mod, nil
+}
+
+func (d *Discord) GetEconomyModule(guildSnowflake string) (*economy.Economy, error) {
+	mod, ok := d.economy[guildSnowflake]
+	if !ok {
+		return nil, ErrModuleNotFound
+	}
 	return mod, nil
 }
 
@@ -206,10 +217,15 @@ func (d *Discord) onGuildCreateGuildUpdate(s *discordgo.Session, g *discordgo.Gu
 		log.Error().Err(err).Msg("critical error init qna module")
 		return
 	}
-
+	ec := economy.New(g.Name, g.ID, d.cfg.DiscordAppID, d.session, d.db, d.log)
+	if err := ec.Load(); err != nil {
+		log.Error().Err(err).Msg("critical error init economy module")
+		return
+	}
 	d.moderation[g.ID] = m
 	d.verification[g.ID] = v
 	d.qna[g.ID] = q
+	d.economy[g.ID] = ec
 
 	log.Debug().Msg("guild instantiation complete")
 }
@@ -218,6 +234,7 @@ func (d *Discord) onInteractionCreate(s *discordgo.Session, i *discordgo.Interac
 	go d.moderation[i.GuildID].OnInteractionCreate(s, i)
 	go d.verification[i.GuildID].OnInteractionCreate(s, i)
 	go d.qna[i.GuildID].OnInteractionCreate(s, i)
+	go d.economy[i.GuildID].OnInteractionCreate(s, i)
 
 	log := d.log.With().
 		Str("guild_id", i.GuildID).
@@ -252,9 +269,9 @@ func (d *Discord) onInteractionCreate(s *discordgo.Session, i *discordgo.Interac
 	}
 
 	guild, err := d.session.Guild(i.GuildID)
-  if err == nil {
-    log = log.With().Str("guild_name", guild.Name).Logger()
-  }
+	if err == nil {
+		log = log.With().Str("guild_name", guild.Name).Logger()
+	}
 
 	log.Info().Msg("interaction request received")
 }

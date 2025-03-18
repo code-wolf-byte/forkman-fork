@@ -8,14 +8,14 @@ import (
 	"syscall"
 	"time"
 
-	"github.com/avvo-na/forkman/common/config"
-	"github.com/avvo-na/forkman/common/logger"
-	"github.com/avvo-na/forkman/internal/database"
-	"github.com/avvo-na/forkman/internal/discord"
-	"github.com/avvo-na/forkman/internal/server"
 	"github.com/aws/aws-sdk-go-v2/aws"
 	awscfg "github.com/aws/aws-sdk-go-v2/config"
 	"github.com/aws/aws-sdk-go-v2/credentials"
+	"github.com/code-wolf-byte/forkman/common/config"
+	"github.com/code-wolf-byte/forkman/common/logger"
+	"github.com/code-wolf-byte/forkman/internal/database"
+	"github.com/code-wolf-byte/forkman/internal/discord"
+	"github.com/code-wolf-byte/forkman/internal/server"
 	"github.com/go-playground/validator/v10"
 )
 

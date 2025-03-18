@@ -7,8 +7,8 @@ import (
 	"os"
 	"time"
 
-	"github.com/avvo-na/forkman/internal/database"
 	"github.com/bwmarrin/discordgo"
+	"github.com/code-wolf-byte/forkman/internal/database"
 )
 
 // TODO: Some values are hard coded here just for brevity.

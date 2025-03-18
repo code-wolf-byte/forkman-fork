@@ -4,7 +4,7 @@ import (
 	"encoding/json"
 	"net/http"
 
-	e "github.com/avvo-na/forkman/internal/server/common/err"
+	e "github.com/code-wolf-byte/forkman/internal/server/common/err"
 	"github.com/markbates/goth"
 	"github.com/markbates/goth/gothic"
 )

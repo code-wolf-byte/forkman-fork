@@ -1,4 +1,4 @@
-module github.com/avvo-na/forkman
+module github.com/code-wolf-byte/forkman
 
 go 1.23.0
 

@@ -3,8 +3,8 @@ package verification
 import (
 	"os"
 
-	"github.com/avvo-na/forkman/common/colors"
 	"github.com/bwmarrin/discordgo"
+	"github.com/code-wolf-byte/forkman/common/colors"
 )
 
 var commands = []*discordgo.ApplicationCommand{

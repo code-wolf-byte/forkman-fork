@@ -6,8 +6,8 @@ import (
 	"runtime/debug"
 	"time"
 
-	"github.com/avvo-na/forkman/internal/discord"
-	e "github.com/avvo-na/forkman/internal/server/common/err"
+	"github.com/code-wolf-byte/forkman/internal/discord"
+	e "github.com/code-wolf-byte/forkman/internal/server/common/err"
 	"github.com/go-chi/chi/v5"
 	"github.com/go-chi/chi/v5/middleware"
 	"github.com/markbates/goth"
@@ -137,7 +137,7 @@ func (m *Middleware) GuildSnowflake(next http.Handler) http.Handler {
 
 func (m *Middleware) HasPermissionGuildDashboard(next http.Handler) http.Handler {
 	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
-	  gs := r.Context().Value("guildSnowflake").(string)
+		gs := r.Context().Value("guildSnowflake").(string)
 
 		session, _ := gothic.Store.Get(r, "forkman-user-session")
 		user := session.Values["user"].(goth.User)

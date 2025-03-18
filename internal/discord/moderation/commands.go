@@ -4,8 +4,8 @@ import (
 	"fmt"
 	"time"
 
-	"github.com/avvo-na/forkman/internal/discord/templates"
 	"github.com/bwmarrin/discordgo"
+	"github.com/code-wolf-byte/forkman/internal/discord/templates"
 )
 
 var commands = []*discordgo.ApplicationCommand{

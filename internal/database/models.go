@@ -53,3 +53,43 @@ type Email struct {
 	CreatedAt      time.Time // Managed by GORM
 	UpdatedAt      time.Time // Managed by GORM
 }
+
+// EconomyEventDefinition is your master list of recognized events/achievements.
+type EconomyEventDefinition struct {
+	ID   uint   `gorm:"primaryKey"`
+	Key  string `gorm:"uniqueIndex"`
+	Name string
+
+	Points        uint
+	MaxOccurrence uint
+
+	UserEventLogs []UserEventLog `gorm:"foreignKey:EconomyEventDefinitionID;references:ID"`
+
+	CreatedAt time.Time
+	UpdatedAt time.Time
+}
+
+// UserEventLog logs each time a user triggers a particular event.
+type UserEventLog struct {
+	ID uint `gorm:"primaryKey"`
+
+	EconomyEventDefinitionID uint
+	EconomyEventDefinition   *EconomyEventDefinition `gorm:"constraint:OnUpdate:CASCADE,OnDelete:SET NULL;"`
+
+	GuildSnowflake string
+	UserSnowflake  string
+
+	CreatedAt time.Time
+	UpdatedAt time.Time
+}
+
+// UserEconomy tracks the user’s overall points in the guild.
+type UserEconomy struct {
+	ID             uint   `gorm:"primaryKey"`
+	GuildSnowflake string `gorm:"index"`
+	UserSnowflake  string `gorm:"index"`
+	Points         uint
+
+	CreatedAt time.Time
+	UpdatedAt time.Time
+}
